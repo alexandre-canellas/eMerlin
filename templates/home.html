@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+
+        <title> eMerlin </title>
+    </head>
+
+    <body>
+
+        <h1>Bem-vindo ao eMerlin!</h1>
+        <p> Nosso mago está pronto para auxiliá-lo na campanha contra spams e a respondê-los à altura! </p>
+        <p> Por favor, sinta-se à vontade para enviar um arquivo <b> .TXT </b> ou <b> .PDF </b> e clicar no botão a seguir. </p>
+
+        <form action="/upload" method="POST" enctype="multipart/form-data">
+            <label for="file-upload">Selecione um arquivo:</label>
+            <input type="file" id="file-upload" name="file">
+            <button type="submit">Upload</button>
+        </form>
+
+        <p> Caso prefira, você também pode se comunicar diretamente com a caixa abaixo para redigir ou copiar um texto que deseja transformar. </p>
+
+    </body>
+
+</html>
