@@ -6,9 +6,7 @@ import os
 app = Flask(__name__)
 
 # Set up OpenAI API key
-client = OpenAI(
-  api_key=""
-)
+client = OpenAI()
 
 # Definição do caminho dos arquivos de upload e tipos permitidos de arquivos
 UPLOAD_FOLDER = 'uploads'
