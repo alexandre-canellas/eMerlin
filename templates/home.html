@@ -19,10 +19,15 @@
         <form action="/upload" method="POST" enctype="multipart/form-data">
             <label for="file-upload">Selecione um arquivo:</label>
             <input type="file" id="file-upload" name="file">
-            <button type="submit">Upload</button>
+            <button type="submit">Transformar</button>
         </form>
 
         <p> Caso prefira, você também pode se comunicar diretamente com a caixa abaixo para redigir ou copiar um texto que deseja transformar. </p>
+        
+        <form action="/upload_text" method="POST" enctype="multipart/form-data">
+            <textarea id="textInput" name="textBox" placeholder="Digite seu texto aqui..."></textarea><br>
+            <input type="submit" value="Carregar Texto">
+        </form>
 
     </body>
 
