@@ -7,7 +7,7 @@ app = Flask(__name__)
 
 # Set up OpenAI API key
 client = OpenAI(
-  api_key="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"
+  api_key=""
 )
 
 # Definição do caminho dos arquivos de upload e tipos permitidos de arquivos
