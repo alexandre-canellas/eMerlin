@@ -18,7 +18,7 @@ client = OpenAI(
 UPLOAD_FOLDER = 'uploads'
 ALLOWED_EXTENSIONS = {'txt', 'pdf'}
 
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+# app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 ###############################         INICIALIZAÇÃO DO APP        ########################################
 
@@ -36,7 +36,8 @@ def upload_file():
         return render_template("error.html", error_text=error_text)
     
     if file and allowed_file(file.filename, ALLOWED_EXTENSIONS):
-        filename = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
+        
+        filename = os.path.join(UPLOAD_FOLDER, file.filename)
         file.save(filename)
 
         user_text = read_uploaded_file(filename)
