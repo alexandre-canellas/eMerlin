@@ -27,7 +27,8 @@ def upload_file():
     file = request.files['file']
 
     if file.filename == '':
-        return 'Nenhum arquivo selecionado.'
+        error_text = "Nenhum arquivo selecionado"
+        return render_template("error.html", error_text=error_text)
     
     if file and allowed_file(file.filename, ALLOWED_EXTENSIONS):
         filename = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
@@ -39,7 +40,8 @@ def upload_file():
 
         return render_template("answer.html", classification=classification, answer=answer)
 
-    return 'Tipo de arquivo não permitido!'
+    error_text = "Parece que o arquivo selecionado não tem o formato permitido (.txt | .pdf)"
+    return render_template("error.html", error_text=error_text)
 
 # Rotina de upload via caixa de texto
 @app.route('/upload_text', methods=['POST'])
@@ -53,7 +55,8 @@ def upload_file_box():
         return render_template("answer.html", classification=classification, answer=answer)
     
     except Exception as e:
-        return f'Erro no upload do texto: {e}'
+        error_text = "Parece que o texto não foi processado corretamente"
+        return render_template("error.html", error_text=error_text)
 
 if __name__ == '__main__':
     app.run(debug=True)
