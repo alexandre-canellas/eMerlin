@@ -1,7 +1,8 @@
 from flask import Flask, request, render_template
 from openai import OpenAI
-import pdfplumber
 import os
+
+from model.utils import allowed_file, read_uploaded_file, classify_and_answer
 
 app = Flask(__name__)
 
@@ -13,23 +14,6 @@ UPLOAD_FOLDER = 'uploads'
 ALLOWED_EXTENSIONS = {'txt', 'pdf'}
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-
-def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
-def read_uploaded_file(filename):
-    
-    if filename.endswith('.txt'):
-        
-        with open(filename, 'r', encoding='utf-8') as file:
-                return file.read()
-        
-    with pdfplumber.open(filename) as pdf:
-        text = ""
-        for page in pdf.pages:
-            text += page.extract_text()
-        
-        return text
 
 ###############################         INICIALIZAÇÃO DO APP        ########################################
 
@@ -45,13 +29,15 @@ def upload_file():
     if file.filename == '':
         return 'Nenhum arquivo selecionado.'
     
-    if file and allowed_file(file.filename):
+    if file and allowed_file(file.filename, ALLOWED_EXTENSIONS):
         filename = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
         file.save(filename)
 
         user_text = read_uploaded_file(filename)
 
-        return user_text
+        classification, answer = classify_and_answer(client, user_text)
+
+        return render_template("answer.html", classification=classification, answer=answer)
 
     return 'Tipo de arquivo não permitido!'
 
@@ -62,30 +48,9 @@ def upload_file_box():
     user_text = request.form['textBox']
 
     try:
-        completion = client.chat.completions.create(
-                model="gpt-4o-mini",
-                messages=[
-                    {
-                        "role": "user",
-                        "content": f"Classifique o texto a seguir conforme a necessidade de resposta (ham): \n\n{user_text}\n\n Responda com 'NECESSARIO' ou 'DESNECESSARIO'.",
-                    },
-                ]
-                # max_tokens=10,
-                # temperature=0.1,
-                # n=1,
-                # stop=None,
-            )
+        classification, answer = classify_and_answer(client, user_text)
 
-        # Extract the classification result from the response
-        classification = completion.choices[0].message.content
-
-        # Return a message based on the classification result
-        if classification == 'NECESSARIO':
-            result_message = "PRODUTIVO"
-            return f"Classificação: {result_message} \n\nSegue abaixo a resposta sugerida:"
-        else:
-            result_message = "IMPRODUTIVO"
-            return f"Classificação: {result_message} \n\nPortanto, não há necessidade de resposta!"
+        return render_template("answer.html", classification=classification, answer=answer)
     
     except Exception as e:
         return f'Erro no upload do texto: {e}'
