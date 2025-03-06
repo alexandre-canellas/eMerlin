@@ -1,13 +1,18 @@
 from flask import Flask, request, render_template
 from openai import OpenAI
+from dotenv import load_dotenv
 import os
 
 from model.utils import allowed_file, read_uploaded_file, classify_and_answer
 
 app = Flask(__name__)
 
+load_dotenv()
+
 # Set up OpenAI API key
-client = OpenAI()
+client = OpenAI(
+    api_key=os.environ["API_KEY"]
+)
 
 # Definição do caminho dos arquivos de upload e tipos permitidos de arquivos
 UPLOAD_FOLDER = 'uploads'
