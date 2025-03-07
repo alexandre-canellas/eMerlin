@@ -23,3 +23,5 @@ Para executar o app basta executar:
 ```
 
 Abra o [http://127.0.0.1:5000] no navegador para executar o processo do aplicativo em ação.
+
+O app foi desenvolvido em python 3.10.12
